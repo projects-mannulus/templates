@@ -1,0 +1,36 @@
+name: Angular compile and compress
+
+on:
+  workflow_call:
+    inputs:
+      baseHref:
+        description: 'Base Href'
+        required: true
+        default: '/'
+      nodeVersion:
+        description: 'Node Version'
+        required: true
+        default: '14.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.nodeVersion }}
+
+      - name: Install Dependencies
+        run: yarn install --force
+
+      #compilando el proyecto y comprimiendo los archivos.
+      - name: Build Angular App
+        run: |
+          yarn run build --configuration=production --base-href=/${{ inputs.baseHref }}/
+          echo "Comprimiendo archivos..."
+          tar -czf dist-${{ github.sha }}.tgz dist/

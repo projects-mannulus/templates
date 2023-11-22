@@ -12,7 +12,7 @@ on:
         description: 'Node Version'
         type: string
         required: true
-        default: '14.x'
+        default: '16.x'
 
 jobs:
   build:
@@ -34,5 +34,9 @@ jobs:
       - name: Build Angular App
         run: |
           yarn run build --configuration=production --base-href=/${{ inputs.baseHref }}/
-          echo "Comprimiendo archivos..."
-          tar -czf dist-${{ github.sha }}.tgz dist/
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist

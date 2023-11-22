@@ -5,10 +5,12 @@ on:
     inputs:
       baseHref:
         description: 'Base Href'
+        type: string
         required: true
         default: '/'
       nodeVersion:
         description: 'Node Version'
+        type: string
         required: true
         default: '14.x'
 

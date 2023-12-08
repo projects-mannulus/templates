@@ -34,11 +34,13 @@ runs:
       run: |
         echo "Instalando dependencias..."
         yarn install
+      shell: bash
 
     - name: Build Angular App
       run: |
         echo "Compilando Aplicacion en la carpeta ${{ inputs.folder }}..."
         yarn build --configuration=production --base-href=/${{ inputs.baseHref }}/
+      shell: bash
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2

@@ -1,0 +1,47 @@
+name: 'Compile angular app'
+description: 'Compile angular and copy dist folder to artifacts'
+
+inputs:
+  baseHref:
+    description: 'Base Href'
+    type: string
+    required: true
+    default: '/'
+    
+  nodeVersion:
+    description: 'Node Version'
+    type: string
+    required: true
+    default: '16.x'
+
+  configuration:
+    description: 'Configuration of angular build. Example: development or production. Default: production'
+    type: string
+    required: false
+    default: 'production'
+
+runs:
+  using: 'composite'
+  steps:
+    #Se debe instalar la version de node que se va a utilizar
+    - name: Setup Node ${{ inputs.nodeVersion }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ inputs.nodeVersion }}
+
+    #poner el comando para las banderas de instalacion
+    - name: Install Dependencies
+      run: |
+        echo "Instalando dependencias..."
+        yarn install
+
+    - name: Build Angular App
+      run: |
+        echo "Compilando Aplicacion en la carpeta ${{ inputs.folder }}..."
+        yarn build --configuration=production --base-href=/${{ inputs.baseHref }}/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: dist

@@ -14,7 +14,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Build Angular App
+    - name: Compress Aplication
       run: |
         echo "Comprimiendo archivos..."
         tar -czf dist-${{ github.sha }}.tgz ${{ inputs.folder }}

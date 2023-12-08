@@ -1,4 +1,4 @@
-name: Angular compile and compress
+name: Angular compile and load artifact
 
 on:
   workflow_call:
@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: yarn install --force
 
-      #compilando el proyecto y comprimiendo los archivos.
+      #compilando el proyecto
       - name: Build Angular App
         run: |
           yarn run build --configuration=production --base-href=/${{ inputs.baseHref }}/

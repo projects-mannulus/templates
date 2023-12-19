@@ -20,6 +20,12 @@ inputs:
     required: false
     default: 'production'
 
+  folder:
+    description: 'Folder name where the angular project are located'
+    type: string
+    required: true
+    default: 'dist'
+
 runs:
   using: 'composite'
   steps:
@@ -28,6 +34,10 @@ runs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ inputs.nodeVersion }}
+
+    - name: Set directory
+      if: ${{ inputs.folder }} != '.'
+      run: cd ${{ inputs.folder }}
 
     #poner el comando para las banderas de instalacion
     - name: Install Dependencies
@@ -39,7 +49,7 @@ runs:
     - name: Build Angular App
       run: |
         echo "Compilando Aplicacion en la carpeta ${{ inputs.folder }}..."
-        yarn build --configuration=production --base-href=/${{ inputs.baseHref }}/
+        yarn build --configuration=${{ inputs.configuration }} --base-href=/${{ inputs.baseHref }}/
       shell: bash
 
     - name: Upload Artifact

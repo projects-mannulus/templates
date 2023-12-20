@@ -31,10 +31,10 @@ runs:
         java-version: 11
 
     - name: Config application.yml
-      if: ${{ env.application_properties != '' }}
+      if: ${{ inputs.application_properties != '' }}
       shell: bash
       run: |
-        echo "${{ env.application_properties }}" > ./src/main/resources/application.yml
+        echo "${{ inputs.application_properties }}" > ./src/main/resources/application.yml
 
     - name: Maven Install
       shell: bash
@@ -44,8 +44,8 @@ runs:
     - name: Publish Package
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ env.jarFileName }}
-        path: ./target/${{ env.jarFileName }}
+        name: ${{ inputs.jarFileName }}
+        path: ./target/${{ inputs.jarFileName }}
 
       # - name: Load to Server
       #   uses: wlixcc/SFTP-Deploy-Action@v1.2.4

@@ -32,10 +32,12 @@ runs:
 
     - name: Config application.yml
       if: ${{ env.application_properties != '' }}
+      shell: bash
       run: |
         echo "${{ env.application_properties }}" > ./src/main/resources/application.yml
 
     - name: Maven Install
+      shell: bash
       run: |
         ./mvnw install --file pom.xml
       

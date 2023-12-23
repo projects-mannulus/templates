@@ -17,10 +17,10 @@ inputs:
     required: true
     default: '11'
 
-  #application_properties: ${{ secrets.APP_PROPERTIES }}
-  #jarFileName: admin-0.0.1-SNAPSHOT.jar
-  #folder_project: sc-admin
-  #PORT: 8090
+  artifact-name:
+    description: 'Name of the artifact to generate. Example: app-0.0.1-SNAPSHOT'
+    required: false
+    default: 'target'
 
 runs:
   using: 'composite'
@@ -44,7 +44,7 @@ runs:
     - name: Publish Package
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ inputs.jarFileName }}
+        name: ${{ inputs.artifact-name }}
         path: ./target/${{ inputs.jarFileName }}
 
       # - name: Load to Server

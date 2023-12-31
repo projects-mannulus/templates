@@ -38,6 +38,7 @@ runs:
     - name: Set directory
       if: ${{ inputs.folder }} != '.'
       run: cd ${{ inputs.folder }}
+      shell: bash
 
     #poner el comando para las banderas de instalacion
     - name: Install Dependencies

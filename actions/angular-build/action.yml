@@ -35,21 +35,18 @@ runs:
       with:
         node-version: ${{ inputs.nodeVersion }}
 
-    - name: Set directory
-      if: ${{ inputs.folder }} != '.'
-      run: cd ${{ inputs.folder }}
-      shell: bash
-
     #poner el comando para las banderas de instalacion
     - name: Install Dependencies
       run: |
         echo "Instalando dependencias..."
+        cd ${{ inputs.folder }}
         yarn install
       shell: bash
 
     - name: Build Angular App
       run: |
-        echo "Compilando Aplicacion en la carpeta ${{ inputs.folder }}..."
+        echo "Compilando Aplicacion en la carpeta ${{ inputs.folder }}"
+        cd ${{ inputs.folder }}
         yarn build --configuration=${{ inputs.configuration }} --base-href=/${{ inputs.baseHref }}/
       shell: bash
 

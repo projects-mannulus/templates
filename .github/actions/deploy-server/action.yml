@@ -3,23 +3,33 @@ description: 'Deploy to Server with SSH connection and SCP'
 
 inputs:
   folder:
-    description: 'folder name where the files are located'
+    description: 'folder name where the files are located. Example: dist'
     required: true
     default: 'dist'
   target:
-    description: 'target folder name where the files are located'
+    description: 'target folder name where the files are located. Example: /var/www/html/pages'
     required: true
     default: 'pages'
+  output_path:
+    description: 'output folder for the uncompressed file. example: angular-app'
+    required: false
+    default: './'
+  pre_command:
+    description: 'pre-command to run before deploy'
+    required: false
+    default: 'rm -r ${{ inputs.output_path }}'
 
 runs:
   using: 'composite'
   steps:
+    #Comprime los archivos del directorio indicado en la variable "folder" para facilitar la transferencia.
     - name: Compress Aplication
       shell: bash
       run: |
         echo "Comprimiendo archivos..."
         tar -czf dist-${{ github.sha }}.tgz ${{ inputs.folder }}
 
+    #Carga el archivo comprimido al servidor a la carpeta que se indico
     - name: Load to Server
       uses: appleboy/scp-action@v0.1.4
       with:
@@ -29,6 +39,9 @@ runs:
         source: dist-${{ github.sha }}.tgz
         target: ~/${{ inputs.target }}
     
+    #Descomprime el archivo en el servidor, haciendo que unicamente extraiga los archivos dentro de la carpeta de la variable "folder"
+    #Se ejecuta el comando pre_command para eliminar la carpeta de salida si es que existe, para evitar que se mezclen los archivos.
+    #Elimina el archivo comprimido para evitar que se quede en el servidor.
     - name: Deploy on Server
       uses: appleboy/ssh-action@master
       with:
@@ -37,6 +50,6 @@ runs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd ~/${{ inputs.target }}
-          rm -r ${{ env.outputPath }}
+          ${{ inputs.pre_command }}
           tar -xzf dist-${{ github.sha }}.tgz --strip-components=1
           rm dist-${{ github.sha }}.tgz

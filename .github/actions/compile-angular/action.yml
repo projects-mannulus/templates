@@ -8,19 +8,16 @@ inputs:
     default: '/'
   baseHref:
     description: 'Base Href las flags del comando de angular para compilar. Ejemplo: lo ingresado debe iniciar con / '
-    type: string
     required: false
     default: '/'
     
   node-version:
     description: 'Node Version'
-    type: string
     required: true
     default: '18.x'
 
   configuration:
     description: 'Configuration of angular build. Example: development or production. Default: production'
-    type: string
     required: false
     default: 'production'
 
@@ -35,11 +32,13 @@ runs:
 
     #poner el comando para las banderas de instalacion
     - name: Install Dependencies
+      shell: bash
       run: |
         echo "Instalando dependencias..."
         yarn install
 
     - name: Build Angular App
+      shell: bash
       run: |
         echo "Compilando Aplicacion en la carpeta ${{ inputs.folder_project }}..."
         cd ${{ inputs.folder_project }}

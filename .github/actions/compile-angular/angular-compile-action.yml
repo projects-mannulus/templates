@@ -2,17 +2,21 @@ name: 'Compile angular app'
 description: 'Compile angular and copy dist folder to artifacts'
 
 inputs:
+  folder_project:
+    description: 'folder name where the files are located. Example: /'
+    required: false
+    default: '/'
   baseHref:
-    description: 'Base Href'
+    description: 'Base Href las flags del comando de angular para compilar. Ejemplo: lo ingresado debe iniciar con / '
     type: string
-    required: true
+    required: false
     default: '/'
     
-  nodeVersion:
+  node-version:
     description: 'Node Version'
     type: string
     required: true
-    default: '16.x'
+    default: '18.x'
 
   configuration:
     description: 'Configuration of angular build. Example: development or production. Default: production'
@@ -24,10 +28,10 @@ runs:
   using: 'composite'
   steps:
     #Se debe instalar la version de node que se va a utilizar
-    - name: Setup Node ${{ inputs.nodeVersion }}
+    - name: Setup Node ${{ inputs.node-version }}
       uses: actions/setup-node@v2
       with:
-        node-version: ${{ inputs.nodeVersion }}
+        node-version: ${{ inputs.node-version }}
 
     #poner el comando para las banderas de instalacion
     - name: Install Dependencies
@@ -37,8 +41,9 @@ runs:
 
     - name: Build Angular App
       run: |
-        echo "Compilando Aplicacion en la carpeta ${{ inputs.folder }}..."
-        yarn build --configuration=production --base-href=/${{ inputs.baseHref }}/
+        echo "Compilando Aplicacion en la carpeta ${{ inputs.folder_project }}..."
+        cd ${{ inputs.folder_project }}
+        yarn build --configuration=${{ inputs.configuration }} --base-href=${{ inputs.baseHref }}/
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2

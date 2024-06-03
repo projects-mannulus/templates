@@ -15,9 +15,9 @@ inputs:
     required: false
     default: './'
   pre_command:
-    description: 'pre-command to run before deploy'
+    description: 'pre-command to run before deploy. example: "rm -r ./angular-app"'
     required: false
-    default: 'rm -r ${{ inputs.output_path }}'
+    default: 'echo "No pre-command"'
   SERVER_USERNAME:
     description: 'Server username'
     required: true

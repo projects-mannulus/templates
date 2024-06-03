@@ -15,6 +15,7 @@ runs:
   using: 'composite'
   steps:
     - name: Compress Aplication
+      shell: bash
       run: |
         echo "Comprimiendo archivos..."
         tar -czf dist-${{ github.sha }}.tgz ${{ inputs.folder }}

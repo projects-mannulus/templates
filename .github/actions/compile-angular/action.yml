@@ -5,7 +5,13 @@ inputs:
   folder_project:
     description: 'folder name where the files are located. Example: /'
     required: false
-    default: '/'
+    default: '.'
+
+  folder_dist:
+    description: 'Target folder name where the files are located after build. Example: dist'
+    required: false
+    default: 'dist'
+
   baseHref:
     description: 'Base Href las flags del comando de angular para compilar. Ejemplo: lo ingresado debe iniciar con / '
     required: false
@@ -16,6 +22,11 @@ inputs:
     required: true
     default: '18.x'
 
+  package-manager:
+    description: 'Package manager to use. Example: npm , yarn or bun. Default: yarn'
+    required: false
+    default: 'yarn'
+
   configuration:
     description: 'Configuration of angular build. Example: development or production. Default: production'
     required: false
@@ -25,17 +36,22 @@ runs:
   using: 'composite'
   steps:
     #Se debe instalar la version de node que se va a utilizar
-    - name: Setup Node ${{ inputs.node-version }}
+    - name: Setup Node version ${{ inputs.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ inputs.node-version }}
 
+    #Se asigna el directorio donde se encuentra el proyecto
+    - name: Set directory
+      shell: bash
+      run: cd ${{ inputs.folder_project }}
+
     #poner el comando para las banderas de instalacion
-    - name: Install Dependencies
+    - name: Install Dependencies with ${{ inputs.package-manager }}
       shell: bash
       run: |
         echo "Instalando dependencias..."
-        yarn install
+        ${{ inputs.package-manager }} install
 
     - name: Build Angular App
       shell: bash
@@ -47,5 +63,5 @@ runs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: dist
-        path: dist
+        name: ${{ inputs.folder_dist }}
+        path: ${{ inputs.folder_dist }}

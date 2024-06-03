@@ -21,15 +21,12 @@ inputs:
   SERVER_USERNAME:
     description: 'Server username'
     required: true
-    default: '${{ secrets.SERVER_USERNAME }}'
   SERVER_HOST:
     description: 'Server host'
     required: true
-    default: '${{ secrets.SERVER_HOST }}'
   SSH_PRIVATE_KEY:
     description: 'SSH private key'
     required: true
-    default: '${{ secrets.SSH_PRIVATE_KEY }}'
 
 runs:
   using: 'composite'

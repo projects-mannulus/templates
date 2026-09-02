@@ -20,6 +20,11 @@ on:
         required: false
         type: string
         default: ''
+      command:
+        description: "Wrangler command a ejecutar (default 'deploy'; ej. 'deploy --env staging')"
+        required: false
+        type: string
+        default: 'deploy'
     secrets:
       CLOUDFLARE_API_TOKEN:
         required: true
@@ -73,5 +78,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: ${{ inputs.working-directory }}
-          command: deploy
+          command: ${{ inputs.command }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
